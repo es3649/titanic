@@ -1,0 +1,3 @@
+ERROR Tried to make an imputer, it can't impute for non-float types
+ERROR how do I put the columns of an imputed nparray back into a pd.DataFrame?
+ERROR can't train a decision tree on non-float types
