@@ -1,0 +1,34 @@
+created DTree.py to train trees on certain parameters from the command line
+Ran the following:
+DTree.py -t train.numerized.csv -s test.numerized.csv \
+    -l 10 11 12 13 14 15 16 17 -r 1 \
+    -d Survived -i Pclass Sex Age SibSp Parch Fare Embarked
+
+/home/es3649/.local/lib/python3.6/site-packages/sklearn/externals/joblib/externals/cloudpickle/cloudpickle.py:47: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+  import imp
+Leaves: 10 Error: 0.14501510574018128
+Leaves: 11 Error: 0.1691842900302115
+Leaves: 12 Error: 0.06948640483383686
+Leaves: 13 Error: 0.15709969788519637
+Leaves: 14 Error: 0.1540785498489426
+Leaves: 15 Error: 0.11178247734138973
+Leaves: 16 Error: 0.11782477341389729
+Leaves: 17 Error: 0.11782477341389729
+
+SUCCESS: rand_state-1 Leaves-12 accuracy-93.1%
+
+created RForest.py to train random forests on certain parameters from the command line
+Ran the following
+RForest.py -t train.numerized.csv -s test.numerized.csv \
+    -l 4 5 6 7 8 9 10 -r 1 \
+    -d Survived -i Pclass Sex Age SibSp Parch Fare Embarked
+
+Leaves: 4 Error: 0.1510574018126888
+Leaves: 5 Error: 0.09063444108761329
+Leaves: 6 Error: 0.04229607250755287
+Leaves: 7 Error: 0.04229607250755287
+Leaves: 8 Error: 0.0634441087613293
+Leaves: 9 Error: 0.08157099697885196
+Leaves: 10 Error: 0.09063444108761329
+
+SUCCESS: rand_state-1 Leaves-7 accuracy-95.8%
