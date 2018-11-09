@@ -31,4 +31,4 @@ Leaves: 8 Error: 0.0634441087613293
 Leaves: 9 Error: 0.08157099697885196
 Leaves: 10 Error: 0.09063444108761329
 
-SUCCESS: rand_state-1 Leaves-7 accuracy-95.8%
+SUCCESS: rand_state-1 Leaves-6 accuracy-95.8%

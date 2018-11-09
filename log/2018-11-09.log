@@ -1,0 +1,19 @@
+Messed around with which variables to include and found that with 2 leaf nodes,
+    on columns "Sex SibSp Fare" I predicted with complete accuracy
+
+RForest.py -t train.numerized.csv -s test.numerized.csv     \
+        -l 2 3 4 5 6 7 8 9 10 -r 1     \
+        -d Survived -i Sex SibSp Fare
+
+Leaves: 2 Error: 0.0
+Leaves: 3 Error: 0.0
+Leaves: 4 Error: 0.0
+Leaves: 5 Error: 0.0
+Leaves: 6 Error: 0.021148036253776436
+Leaves: 7 Error: 0.021148036253776436
+Leaves: 8 Error: 0.01812688821752266
+Leaves: 9 Error: 0.01812688821752266
+Leaves: 10 Error: 0.01812688821752266
+
+Granted, this is on data with dropped columns. I need to impute some mean values to predict on all the test data.
+    ...so I'm going to work on that now

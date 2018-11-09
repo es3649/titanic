@@ -1,30 +1,19 @@
 #!/usr/bin/python3.6
 
-# silence warnings from sklearn
-def warn(*args, **kwargs):
-    pass
-
-import warnings
-warnings.warn = warn
-
-
 """
-MakeForest() takes some parameters and makes a decision tree with them
+MakeTree() takes some parameters and makes a decision tree with them
 
 :param train_X: The training independent variables
 :param train_y: The training dependent variable
-:param random_state: the random starting state, for reproducibility
-    corresponds directly to the eponymous parameter for RandomForestRegressor
-:param max_leaves: The maximum number of leaf nodes the trees can/should have
-    corresponds directly to the eponymous parameter for RandomForestRegressor
+:param neighbor_ct: The maximum number of neighbors the tree can/should consider
+    corresponds directly to the eponymous parameter for KNeighborsClassifier
 
-:returns: a trained RandomForestRegressor
+:returns: a trained DecisionTreeRegressor
 """
-def MakeForest(train_X, train_y, random_state=0,max_leaves=512):
-    from sklearn.ensemble import RandomForestRegressor
-    from numpy import ravel
-    dtr = RandomForestRegressor(random_state=random_state, max_leaf_nodes=max_leaves)
-    return dtr.fit(train_X, ravel(train_y))
+def MakeClassifier(train_X, train_y, neighbor_ct=10):
+    from sklearn.neighbors import KNeighborsClassifier
+    knc = KNeighborsClassifier(n_neighbors=neighbor_ct)
+    return knc.fit(train_X, train_y)
 
 def adjust(some_list):
     from math import floor
@@ -32,8 +21,6 @@ def adjust(some_list):
         some_list[i] = floor(.5 + some_list[i])
     
     return some_list
-
-
 
 
 
@@ -51,10 +38,18 @@ def EvalMae(tree, test_X, test_y):
     preds = tree.predict(test_X)
     return mean_absolute_error(adjust(preds), test_y)
 
+def toCSV(tree, out_file):
+    preds = tree.predict(test_X)
+    passenger_id = preds.PassengerId
+    test = pd.DataFrame( { "PassengerId" : passenger_id , "Survived" : data } )
+    test = test.astype(int)
+    test.to_csv(out_file, index=False)
+
+
 
 def main():
     import argparse as ap
-    parser = ap.ArgumentParser(description="train and evaluate a random forest given certain params")
+    parser = ap.ArgumentParser(description="train and evaluate a decision tree given certain params")
 
     # get data paths
     parser.add_argument('--train', '-t', dest='train', action='store',
@@ -64,13 +59,11 @@ def main():
 
     # out file?
     parser.add_argument('--out', '-o', dest='out', action='store',
-                    type=str, nargs=1, default="")
+                    type=str, nargs=1, argument_default="")
 
     # get tree parameters
     parser.add_argument('--leaves', '-l', dest='leaves', action='store',
                     type=int, nargs='+')
-    parser.add_argument('--random_state', '-r', dest='random_state', action='store',
-                    type=int, nargs=1)
 
     # get data info
     parser.add_argument('--dependent', '-d', dest='dep', action='store',
@@ -93,17 +86,9 @@ def main():
     test_y = test[args.dep]
 
     for l in args.leaves:
-        t = MakeForest(train_X, train_y,
-            random_state=args.random_state[0], max_leaves=l)
+        t = MakeClassifier(train_X, train_y, neighbor_ct=l)
         print("Leaves:", l, "Error:", EvalMae(t, test_X, test_y))
-        if args.out != "" and len(args.leaves) == 1:
-            preds = t.predict(test_X)
-            preds = adjust(preds)
-            # print(preds, len(preds))
-            passenger_id = test.PassengerId
-            test = pd.DataFrame( { "PassengerId" : passenger_id , "Survived" : preds } )
-            test = test.astype(int)
-            test.to_csv(args.out[0], index=False)
+        
 
 
 
